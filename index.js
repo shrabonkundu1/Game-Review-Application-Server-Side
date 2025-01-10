@@ -30,6 +30,7 @@ async function run() {
     // await client.connect();
 
     const reviewCollection = client.db('reviewDB').collection('review');
+    const watchlistCollection = client.db('watchlistDB').collection('watchlist');
 
     app.get('/reviews', async(req, res)=> {
         const cursor = reviewCollection.find();
@@ -44,10 +45,47 @@ async function run() {
       res.send(result);
     })
 
+
+    // my review
+    app.get('/myReviews', async(req,res)=>{
+      const email = req.query.email;
+      const query = {email: email};
+      const result = await reviewCollection.find(query).toArray();
+      res.send(result);
+    })
+
+    // app.post('/gamewatchlist', async(req,res)=> {
+    //   const email = req.body;
+    //   const query = {email:email}
+    //   const result = await reviewCollection.find(query);
+    //   res.send(result)
+    //   // console.log(result)
+    // })
+
+    app.post('/gamewatchlist', async(req,res) => {
+      const data = req.body;
+      const result = await reviewCollection.insertOne(data)
+      res.send(result)
+    })
+
+      
+
     app.post('/reviews', async(req,res)=> {
         const newReview = req.body;
         const result = await reviewCollection.insertOne(newReview);
         res.send(result)
+    })
+
+
+
+
+   
+
+    app.delete('/myReviews/:id', async(req,res)=> {
+      const id =  req.params.id;
+      const query = {_id : new ObjectId(id)};
+      const result = await reviewCollection.deleteOne(query);
+      res.send(result);
     })
 
 
