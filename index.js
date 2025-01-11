@@ -54,13 +54,6 @@ async function run() {
       res.send(result);
     })
 
-    // app.post('/gamewatchlist', async(req,res)=> {
-    //   const email = req.body;
-    //   const query = {email:email}
-    //   const result = await reviewCollection.find(query);
-    //   res.send(result)
-    //   // console.log(result)
-    // })
 
     app.post('/gamewatchlist', async(req,res) => {
       const data = req.body;
@@ -79,11 +72,29 @@ async function run() {
 
 
 
-   
+    app.put("/reviews/:id",async(req,res) => {
+      const id = req.params.id;
+      const filter =  {_id: new ObjectId(id)};
+      const option = {upsert: true};
+      const updateReview = req.body;
+      const review = {
+        $set:{
+          title : updateReview.title,
+          photo : updateReview.photo,
+          description : updateReview.description,
+          rating : updateReview.rating,
+          year : updateReview.year,
+          genre : updateReview.genre,
+        }
+      }
+      const result = await reviewCollection.updateOne(filter,review,option);
+      res.send(result)
+    })
 
     app.delete('/myReviews/:id', async(req,res)=> {
       const id =  req.params.id;
       const query = {_id : new ObjectId(id)};
+      console.log('is id' , id)
       const result = await reviewCollection.deleteOne(query);
       res.send(result);
     })
