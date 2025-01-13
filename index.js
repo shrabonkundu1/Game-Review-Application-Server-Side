@@ -32,33 +32,7 @@ async function run() {
     const reviewCollection = client.db('reviewDB').collection('review');
     const watchlistCollection = client.db('watchlistDB').collection('watchlist');
 
-    // app.get('/highestRatedGame', async(req, res)=> {
-    //   try{
-    //     const response = await fetch('https://game-review-theta.vercel.app/reviews');
-    //     const reviewData = await response.json();
-    //     const highestRatedGames  = reviewData.sort((a, b) => b.rating - a.rating).slice(0, 10);
-    //     res.json(highestRatedGames)
-    //   }catch{
-    //     console.error(error);
-    //     res.status(500).json({ error: 'error' });
-    //   }
-        
-    // })
-
-    // app.get('/highestRatedGames', async (req, res) => {
-    //   try {
-    //     const games = await reviewCollection
-    //       .find()
-    //       .sort({ rating: -1 })
-    //       .limit(6)
-    //       .toArray();  // Converts the cursor to an array
-    //     res.json(games);
-    //   } catch (error) {
-    //     console.error("Error fetching highest rated games:", error);
-    //     res.status(500).send("Error fetching games");
-    //   }
-    // });
-
+    
     
     
     
@@ -81,45 +55,7 @@ async function run() {
     })
 
 
-    // app.get('/watchlist/:email', async(req,res) => {
-    //   const email = req.query.email;
-    //   const query = {email: email}
-    //   const result = await watchlistCollection.find(query).toArray()
-    //   res.send(result)
-    // })
-
-    // app.get('/watchlist/:email', async (req, res) => {
-    //   const { email } = req.params;
     
-    //   try {
-    //     const watchlist = await wishListCollection.find({ userEmail: email }).toArray();
-    //     console.log(watchlist);
-    //     // console.log(watchlist);
-    //     res.json(watchlist);
-    //   } catch (error) {
-    //     res.status(500).json({ message: 'Error fetching watchlist' });
-    //   }
-    // });
-
-    // app.post('/watchlist', async (req, res) => {
-    //   const watchlistData = req.body; // Get the data from the request body
-    
-    //   try {
-    //     // Insert the watchlist item into the collection
-    //     const result = await watchlistCollection.insertOne(watchlistData);
-    
-    //     if (result.insertedId) {
-    //       return res.status(201).json({
-    //         message: 'Added to Watchlist successfully',
-    //       });
-    //     } else {
-    //       return res.status(400).json({ message: 'Failed to add to Watchlist' });
-    //     }
-    //   } catch (error) {
-    //     console.error('Error adding to watchlist:', error);
-    //     res.status(500).json({ message: 'Error adding to Watchlist' });
-    //   }
-    // });
     
     app.post('/reviews', async(req,res)=> {
       const newReview = req.body;
@@ -161,7 +97,13 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result)
     })
-
+    
+    app.delete('/watchlist/:id',async(req,res)=> {
+      const id  = req.params.id;
+      const query = {_id: id }
+      const result = await watchlistCollection.deleteOne(query);
+      res.send(result);
+    })
     
 
       
