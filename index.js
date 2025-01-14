@@ -92,8 +92,16 @@ async function run() {
       res.send(result)
     })
 
-    app.get('/watchlist/:email',async(req,res)=> {
+    app.get('/watchlist', async(req, res)=> {
       const cursor = watchlistCollection.find();
+      const result = await cursor.toArray();
+      res.send(result)
+  })
+
+    app.get('/watchlist/:email',async(req,res)=> {
+      const email = req.params.email;
+      const query = {email:email}
+      const cursor = watchlistCollection.find(query);
       const result = await cursor.toArray();
       res.send(result)
     })
